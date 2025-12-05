@@ -170,13 +170,13 @@ def extract_from_neo4j(driver):
     results = neo4j_query(driver, query)
     added_words = []
     for record in results:
-        if record.get('name'):
+        if record.get('name') and isinstance(record['name'], str):
             added_words.append(record['name'])
             added_words += record['name'].split(' ')
-        if record.get('displayname'):
+        if record.get('displayname') and isinstance(record['displayname'], str):
             added_words.append(record['displayname'])
             added_words += record['displayname'].split(' ')
-        if record.get('description'):
+        if record.get('description') and isinstance(record['description'], str):
             added_words += record['description'].split(' ')
     added_words = list(set([w for w in added_words if w]))
     print("found %d words" % (len(added_words)), flush=True)
