@@ -68,7 +68,36 @@ def neo4j_query(driver, query):
 
 
 def extract_from_neo4j(driver):
-    """Extract wordlist data from Neo4j/BloodHound database"""
+    """
+    Extract wordlist data from a Neo4j/BloodHound database.
+
+    This function queries the Neo4j database for nodes labeled as `User` or `Computer`.
+    It expects these nodes to have the following properties:
+        - `name`: The display name of the user or computer (string).
+        - `samaccountname`: The SAM account name (string).
+        - `description`: A description field (string, may be empty).
+
+    The function extracts words from these properties to build a wordlist.
+    It assumes that the BloodHound database uses the default schema as produced by BloodHound
+    (tested with BloodHound v4.x and above), and that the relevant properties exist on the nodes.
+
+    Node labels expected:
+        - User
+        - Computer
+
+    Properties expected on these nodes:
+        - name
+        - samaccountname
+        - description
+
+    If the BloodHound schema or property names differ, this function may need to be updated.
+
+    Args:
+        driver: A Neo4j driver instance (from neo4j.GraphDatabase).
+
+    Returns:
+        list: A list of unique words extracted from the specified properties.
+    """
     wordlist = []
     
     # Extracting user and computer names
