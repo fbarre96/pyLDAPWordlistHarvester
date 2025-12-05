@@ -148,7 +148,8 @@ def extract_from_neo4j(driver):
     for record in results:
         if record.get('name'):
             added_words.append(record['name'])
-            added_words += record['name'].split('.')
+            if isinstance(record['name'], str):
+                added_words += record['name'].split('.')
         if record.get('description'):
             added_words += record['description'].split(' ')
     added_words = list(set([w for w in added_words if w]))
