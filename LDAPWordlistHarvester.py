@@ -295,15 +295,19 @@ if __name__ == '__main__':
             driver.verify_connectivity()
             print("done.")
             print()
-            
-            # Extract data from Neo4j
-            wordlist = extract_from_neo4j(driver)
-            
-            driver.close()
         except Exception as e:
             print("failed!")
             print("[!] Error connecting to Neo4j: %s" % str(e))
             sys.exit(1)
+
+        try:
+            # Extract data from Neo4j
+            wordlist = extract_from_neo4j(driver)
+        except Exception as e:
+            print("[!] Error during Neo4j operation: %s" % str(e))
+            driver.close()
+            sys.exit(1)
+        driver.close()
     else:
         # LDAP mode
         if options.auth_hashes is not None:
